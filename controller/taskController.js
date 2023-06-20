@@ -1,21 +1,20 @@
 const Task = require("../models/task");
 const {
-  findAllTask,
+  findAllTasks,
   createTask,
-  updateTask,
   deleteTask,
 } = require("../dbService/taskService");
 
 const getAllTasks = async (req, res) => {
   try {
-    const tasks = await findAllTask();
+    const tasks = await findAllTasks();
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
-const createTask = async (req, res) => {
+const addTask = async (req, res) => {
   try {
     const { name, description } = req.body;
     const task = await createTask(name, description);
@@ -25,18 +24,7 @@ const createTask = async (req, res) => {
   }
 };
 
-const updateTask = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { completed } = req.body;
-    const task = await updateTask(id, completed);
-    res.json(task);
-  } catch (error) {
-    res.status(400).json({ error: "Bad request" });
-  }
-};
-
-const deleteTask = async (req, res) => {
+const removeTask = async (req, res) => {
   try {
     const { id } = req.params;
     const task = await deleteTask(id);
@@ -48,7 +36,6 @@ const deleteTask = async (req, res) => {
 
 module.exports = {
   getAllTasks,
-  createTask,
-  updateTask,
-  deleteTask,
+  addTask,
+  removeTask,
 };
