@@ -9,6 +9,16 @@ const findAllTasks = async () => {
   }
 };
 
+const findTask = async (id) => {
+  try {
+    const task = await Task.findById(id);
+    console.log('task',   task)
+    return task;
+  } catch (error) {
+    throw new Error("Failed to fetch task");
+  }
+};
+
 const createTask = async (name, description) => {
   try {
     const task = new Task({ name, description });
@@ -30,6 +40,7 @@ const deleteTask = async (id) => {
 
 module.exports = {
   findAllTasks,
+  findTask,
   createTask,
   deleteTask
 };

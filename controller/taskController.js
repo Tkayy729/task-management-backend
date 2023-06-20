@@ -3,7 +3,18 @@ const {
   findAllTasks,
   createTask,
   deleteTask,
-} = require("../dbService/taskService");
+  findTask,
+} = require("../dbservice/taskService");
+
+const getTask = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const task = await findTask(id);
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 const getAllTasks = async (req, res) => {
   try {
@@ -34,8 +45,29 @@ const removeTask = async (req, res) => {
   }
 };
 
+const toggleTaskCompletion = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const task = await findTask(id);
+
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    task.completed = !task.completed;
+    await task.save();
+
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   getAllTasks,
   addTask,
   removeTask,
+  toggleTaskCompletion,
+  getTask,
 };

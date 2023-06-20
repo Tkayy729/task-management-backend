@@ -4,15 +4,16 @@ const ConnectDB = require("./configs/dbConfig");
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 require("dotenv").config()
 
-const taskRoutes = require("./routes/taskRoute")
+const taskRoutes = require("./routes/taskRoute");
+const { TEST_PORT } = require("./configs/envConfig");
 
 const app = express()
 app.use(express.json());
 ConnectDB();
 app.use(morgan("dev"))
 
-const port = process.env.PORT || 6000
 
+const port = process.env.NODE_ENV === 'test' ? TEST_PORT : process.env.PORT;
 
 app.listen(port , () => {
     console.log("Server is runnning on port "+port)
@@ -28,3 +29,5 @@ app.use('/api/tasks', taskRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
+
+module.exports = app;
