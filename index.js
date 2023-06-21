@@ -1,13 +1,16 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors")
 const ConnectDB = require("./configs/dbConfig");
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 require("dotenv").config()
 
 const taskRoutes = require("./routes/taskRoute");
 const { TEST_PORT } = require("./configs/envConfig");
-
 const app = express()
+app.use(cors());
+
+
 app.use(express.json());
 ConnectDB();
 app.use(morgan("dev"))
